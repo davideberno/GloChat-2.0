@@ -1,0 +1,26 @@
+.join-room {
+  width: 40%;
+  height: 50%;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1em;
+  form {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  input {
+    margin-bottom: 20px;
+    height: 2em;
+  }
+  button {
+    margin-top: 10px;
+    height: 2em;
+  }
+}
