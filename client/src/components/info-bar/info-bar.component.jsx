@@ -2,7 +2,9 @@ import React from "react";
 
 import "./info-bar.styles.scss";
 
-const InfoBar = ({ userName, language, languages, setLanguage }) => (
+import languages from "../../languages";
+
+const InfoBar = ({ userName, language, setLanguage }) => (
   <div className="info-bar">
     <div className="user-name">Welcome {userName}</div>
     <div className="select-language">

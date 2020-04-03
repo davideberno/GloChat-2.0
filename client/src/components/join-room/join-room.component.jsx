@@ -7,7 +7,7 @@ import "./join-room.styles.scss";
 const JoinRoom = ({ socket, warning, languages }) => {
   const [userName, setUserName] = useState("");
   const [roomName, setRoomName] = useState("");
-  const [defaultLanguage, setDefaultLanguage] = useState("");
+  const [defaultLanguage, setDefaultLanguage] = useState("English");
 
   const handleSubmit = event => {
     event.preventDefault();

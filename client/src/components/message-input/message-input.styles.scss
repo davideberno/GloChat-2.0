@@ -1,0 +1,26 @@
+.message-form {
+  grid-area: 3/2/4/4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  input {
+    width: 70%;
+    height: 40px;
+    font-size: 1.1rem;
+    border-radius: 20px;
+    border: 1px solid lightgrey;
+    margin-right: 5px;
+    padding-left: 10px;
+    outline: none;
+  }
+
+  button {
+    height: 40px;
+    width: 40px;
+    border: 1px solid lightgrey;
+    background-color: white;
+    border-radius: 50%;
+  }
+}

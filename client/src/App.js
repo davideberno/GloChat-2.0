@@ -3,9 +3,7 @@ import React, { Component } from "react";
 import io from "socket.io-client";
 
 import JoinRoom from "./components/join-room/join-room.component";
-import ChatRoom from "./components/chat-room/chat-room.component";
-import InfoBar from "./components/info-bar/info-bar.component";
-import Users from "./components/users/users.component";
+import Chat from "./components/chat/chat.component";
 
 import languages from "./languages";
 
@@ -16,8 +14,6 @@ class App extends Component {
     userName: null,
     roomName: null,
     socket: null,
-    messages: [],
-    users: [],
     language: "",
     warning: ""
   };
@@ -45,18 +41,6 @@ class App extends Component {
         language: defaultLanguage
       });
     });
-    //Listen for users in room
-    socket.on("roomUsers", users => {
-      this.setState({
-        users: users
-      });
-    });
-    //Listen for message event
-    socket.on("message", message => {
-      this.setState({
-        messages: [...this.state.messages, message]
-      });
-    });
     //Listen for warnings
     socket.on("warning", warning => {
       this.setState(
@@ -82,34 +66,17 @@ class App extends Component {
   }
 
   render() {
-    const {
-      messages,
-      roomName,
-      socket,
-      userName,
-      users,
-      warning,
-      language
-    } = this.state;
+    const { userName, language, roomName, socket, warning } = this.state;
     return !roomName ? (
       <JoinRoom socket={socket} warning={warning} languages={languages} />
     ) : (
-      <div className="chat-container">
-        <InfoBar
-          userName={userName}
-          language={language}
-          languages={languages}
-          setLanguage={this.setLanguage}
-        />
-        <Users users={users} />
-        <ChatRoom
-          messages={messages}
-          roomName={roomName}
-          userName={userName}
-          socket={socket}
-          language={language}
-        />
-      </div>
+      <Chat
+        socket={socket}
+        userName={userName}
+        roomName={roomName}
+        language={language}
+        setLanguage={this.setLanguage}
+      />
     );
   }
 }
