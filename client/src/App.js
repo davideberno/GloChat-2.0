@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 
 import io from "socket.io-client";
 
@@ -9,76 +9,52 @@ import languages from "./languages";
 
 import "./App.scss";
 
-class App extends Component {
-  state = {
-    userName: null,
-    roomName: null,
-    socket: null,
-    language: "",
-    warning: ""
-  };
+const newSocket = io("http://localhost:5000");
 
-  setLanguage = event => {
-    const { socket } = this.state;
-    this.setState({
-      language: event.target.value
-    });
+const App = () => {
+  const [socket] = useState(newSocket);
+  const [userName, setUserName] = useState("");
+  const [roomName, setRoomName] = useState("");
+  const [language, setLanguage] = useState("");
+  const [warning, setWarning] = useState("");
+
+  const setNewLanguage = event => {
+    setLanguage(event.target.value);
     socket.emit("setLanguage", event.target.value);
   };
 
-  componentDidMount() {
-    //Connect to new socket
-    const socket = io("http://localhost:5000");
-    //Set socket for the session
-    this.setState({
-      socket: socket
-    });
-    //Listen for join room event
+  useEffect(() => {
     socket.on("joinedRoom", ({ userName, roomName, defaultLanguage }) => {
-      this.setState({
-        userName: userName,
-        roomName: roomName,
-        language: defaultLanguage
-      });
+      setUserName(userName);
+      setRoomName(roomName);
+      setLanguage(defaultLanguage);
     });
-    //Listen for warnings
     socket.on("warning", warning => {
-      this.setState(
-        {
-          warning: warning
-        },
-        () => {
-          setTimeout(() => {
-            this.setState({
-              warning: ""
-            });
-          }, 2000);
-        }
-      );
+      setWarning(warning);
+
+      setTimeout(() => {
+        setWarning("");
+      }, 2000);
     });
-  }
 
-  componentWillUnmount() {
-    const { socket } = this.state;
-    //Disconnect from socket
-    socket.emit("disconnect");
-    socket.off();
-  }
+    return () => {
+      socket.emit("disconnect");
 
-  render() {
-    const { userName, language, roomName, socket, warning } = this.state;
-    return !roomName ? (
-      <JoinRoom socket={socket} warning={warning} languages={languages} />
-    ) : (
-      <Chat
-        socket={socket}
-        userName={userName}
-        roomName={roomName}
-        language={language}
-        setLanguage={this.setLanguage}
-      />
-    );
-  }
-}
+      socket.off();
+    };
+  }, [socket]);
+
+  return !roomName ? (
+    <JoinRoom socket={socket} warning={warning} languages={languages} />
+  ) : (
+    <Chat
+      socket={socket}
+      userName={userName}
+      roomName={roomName}
+      language={language}
+      setLanguage={setNewLanguage}
+    />
+  );
+};
 
 export default App;
