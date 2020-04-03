@@ -39,7 +39,6 @@ const App = () => {
 
     return () => {
       socket.emit("disconnect");
-
       socket.off();
     };
   }, [socket]);
