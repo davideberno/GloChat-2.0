@@ -2,8 +2,7 @@ const { Translate } = require("@google-cloud/translate").v2;
 
 const config = {
   projectId: "glochat2-1585614391026",
-  keyFilename:
-    "/home/davide/Desktop/Projects/glo-chat-2.0/server/glochat2-6faedebd0d1c.json"
+  keyFilename: "/home/davide/Downloads/glochat2-ee4b22d8ed00.json"
 };
 
 module.exports = (text, target) => {
