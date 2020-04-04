@@ -8,12 +8,21 @@
   padding: 0 60px;
 
   .select-language {
+    width: 70%;
     border: 1px solid lightgrey;
     border-radius: 10px;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    label {
-      margin-right: 5px;
+    .info-bar-item {
+      display: flex;
+      align-items: center;
+    }
+    input,
+    select {
+      margin-left: 5px;
     }
   }
 }

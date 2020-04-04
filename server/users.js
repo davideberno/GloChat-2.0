@@ -19,7 +19,7 @@ const addUser = ({ userName, roomName, id, language }) => {
   } else if (existingUser) {
     return { error: "Username already taken!" };
   } else {
-    users.push({ userName, roomName, id, language });
+    users.push({ userName, roomName, id, language, translationOn: true });
     const filteredUsers = getUsersInRoom(id);
     return { users: filteredUsers };
   }
@@ -28,6 +28,12 @@ const addUser = ({ userName, roomName, id, language }) => {
 const setUserLanguage = (id, lang) => {
   const user = getUser(id);
   user.language = lang;
+  return user;
+};
+//Get user socket and translation boolean, returns user Object
+const toogleTranslation = (id, translationOn) => {
+  const user = getUser(id);
+  user.translationOn = translationOn;
   return user;
 };
 //Get user socket id and returns the user Object and the updated users list
@@ -42,5 +48,6 @@ module.exports = {
   deleteUser,
   getUser,
   setUserLanguage,
-  getUsersInRoom
+  getUsersInRoom,
+  toogleTranslation
 };

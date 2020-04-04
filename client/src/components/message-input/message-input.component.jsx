@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import IsTyping from "../is-typing/is-typing.component";
 
+import Button from "@material-ui/core/Button";
+
 import "./message-input.styles.scss";
 
 const MessageInput = ({ socket, userName, roomName, language }) => {
@@ -13,15 +15,16 @@ const MessageInput = ({ socket, userName, roomName, language }) => {
     setMessage(event.target.value);
   };
 
-  const handleSubmitMessage = event => {
-    event.preventDefault();
-    socket.emit("message", {
-      userName: userName,
-      text: message,
-      language: language,
-      roomName: roomName
-    });
-    setMessage("");
+  const handleSubmitMessage = () => {
+    if (message) {
+      socket.emit("message", {
+        userName,
+        language,
+        roomName,
+        text: message
+      });
+      setMessage("");
+    }
   };
 
   return (
@@ -34,9 +37,7 @@ const MessageInput = ({ socket, userName, roomName, language }) => {
         value={message}
         onChange={handleChange}
       />
-      <button type="submit" onClick={handleSubmitMessage}>
-        Send
-      </button>
+      <Button onClick={handleSubmitMessage}>Send</Button>
     </form>
   );
 };

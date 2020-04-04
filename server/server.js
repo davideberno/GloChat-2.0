@@ -15,7 +15,8 @@ const {
   addUser,
   deleteUser,
   setUserLanguage,
-  getUsersInRoom
+  getUsersInRoom,
+  toogleTranslation
 } = require("./users");
 
 io.on("connection", socket => {
@@ -35,7 +36,6 @@ io.on("connection", socket => {
 
     socket.join(roomName);
 
-    //!!!!!
     socket.emit("joinedRoom", { userName, roomName, defaultLanguage });
 
     io.to(roomName).emit("roomUsers", users);
@@ -46,11 +46,15 @@ io.on("connection", socket => {
     });
   });
 
+  socket.on("translationOn", translationOn => {
+    toogleTranslation(socket.id, translationOn);
+  });
+
   socket.on("message", ({ text, userName, roomName }) => {
     const users = getUsersInRoom(socket.id);
 
     users.forEach(async user => {
-      if (user.id === socket.id) {
+      if (user.id === socket.id || !user.translationOn) {
         io.to(`${user.id}`).emit("message", {
           userName,
           text
@@ -66,8 +70,6 @@ io.on("connection", socket => {
         });
       }
     });
-
-    //io.to(roomName).emit("message", { userName, text });
   });
 
   socket.on("setLanguage", language => {

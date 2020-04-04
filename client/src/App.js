@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 
+import { BrowserRouter, Route } from "react-router-dom";
+
 import io from "socket.io-client";
 
 import JoinRoom from "./components/join-room/join-room.component";
 import Chat from "./components/chat/chat.component";
-
-import languages from "./languages";
 
 import "./App.scss";
 
@@ -16,7 +16,6 @@ const App = () => {
   const [userName, setUserName] = useState("");
   const [roomName, setRoomName] = useState("");
   const [language, setLanguage] = useState("");
-  const [warning, setWarning] = useState("");
 
   const setNewLanguage = event => {
     setLanguage(event.target.value);
@@ -29,13 +28,6 @@ const App = () => {
       setRoomName(roomName);
       setLanguage(defaultLanguage);
     });
-    socket.on("warning", warning => {
-      setWarning(warning);
-
-      setTimeout(() => {
-        setWarning("");
-      }, 2000);
-    });
 
     return () => {
       socket.emit("disconnect");
@@ -43,16 +35,22 @@ const App = () => {
     };
   }, [socket]);
 
-  return !roomName ? (
-    <JoinRoom socket={socket} warning={warning} languages={languages} />
-  ) : (
-    <Chat
-      socket={socket}
-      userName={userName}
-      roomName={roomName}
-      language={language}
-      setLanguage={setNewLanguage}
-    />
+  return (
+    <BrowserRouter>
+      <Route exact path="/" render={() => <JoinRoom socket={socket} />} />
+      <Route
+        path="/chat/:roomId"
+        render={() => (
+          <Chat
+            socket={socket}
+            userName={userName}
+            roomName={roomName}
+            language={language}
+            setLanguage={setNewLanguage}
+          />
+        )}
+      />
+    </BrowserRouter>
   );
 };
 
