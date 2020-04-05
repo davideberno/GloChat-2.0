@@ -1,17 +1,17 @@
 const users = [];
 //Get user socket id and returns user Object
-const getUser = id => {
-  return users.find(user => user.id === id);
+const getUser = (id) => {
+  return users.find((user) => user.id === id);
 };
 //Get user socket id and returns all users in current room.
-const getUsersInRoom = id => {
+const getUsersInRoom = (id) => {
   const user = getUser(id);
-  return users.filter(u => u.roomName === user.roomName);
+  return users.filter((u) => u.roomName === user.roomName);
 };
 //Get an user Object and returns updated users list
 const addUser = ({ userName, roomName, id, language }) => {
   const existingUser = users.find(
-    u => u.userName.toLowerCase() === userName.toLowerCase()
+    (u) => u.userName.toLowerCase() === userName.toLowerCase()
   );
 
   if (!userName || !roomName) {
@@ -19,7 +19,8 @@ const addUser = ({ userName, roomName, id, language }) => {
   } else if (existingUser) {
     return { error: "Username already taken!" };
   } else {
-    users.push({ userName, roomName, id, language, translationOn: true });
+    const user = { userName, roomName, id, language, translationOn: true };
+    users.push(user);
     const filteredUsers = getUsersInRoom(id);
     return { users: filteredUsers };
   }
@@ -27,18 +28,22 @@ const addUser = ({ userName, roomName, id, language }) => {
 //Get user socket id and choosen language, and returns the user Object
 const setUserLanguage = (id, lang) => {
   const user = getUser(id);
-  user.language = lang;
+  if (user) {
+    user.language = lang;
+  }
   return user;
 };
 //Get user socket and translation boolean, returns user Object
 const toogleTranslation = (id, translationOn) => {
   const user = getUser(id);
-  user.translationOn = translationOn;
+  if (user) {
+    user.translationOn = translationOn;
+  }
   return user;
 };
 //Get user socket id and returns the user Object and the updated users list
-const deleteUser = id => {
-  const index = users.findIndex(u => u.id === id);
+const deleteUser = (id) => {
+  const index = users.findIndex((u) => u.id === id);
   const user = users.splice(index, 1)[0];
   return { user, users };
 };
@@ -49,5 +54,5 @@ module.exports = {
   getUser,
   setUserLanguage,
   getUsersInRoom,
-  toogleTranslation
+  toogleTranslation,
 };

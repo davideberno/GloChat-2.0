@@ -1,12 +1,22 @@
 require("dotenv").config();
 
-const app = require("express")();
+const path = require("path");
+
+const express = require("express");
+
+const app = express();
 
 const http = require("http").createServer(app);
 
-const PORT = 5000 || process.env.PORT;
+const PORT = process.env.PORT || 8080;
+
+app.use(express.static(path.join(__dirname, "/client/build")));
 
 const io = require("socket.io")(http);
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/build/index.html"));
+});
 
 const translateText = require("./goole-translate/translateText");
 const { languages } = require("./goole-translate/languages-server");
@@ -16,10 +26,10 @@ const {
   deleteUser,
   setUserLanguage,
   getUsersInRoom,
-  toogleTranslation
+  toogleTranslation,
 } = require("./users");
 
-io.on("connection", socket => {
+io.on("connection", (socket) => {
   console.log(`${socket.id} connected`);
 
   socket.on("join", ({ userName, roomName, defaultLanguage }) => {
@@ -27,7 +37,7 @@ io.on("connection", socket => {
       userName,
       roomName,
       language: defaultLanguage,
-      id: socket.id
+      id: socket.id,
     });
 
     if (error) {
@@ -42,22 +52,22 @@ io.on("connection", socket => {
 
     socket.to(roomName).emit("message", {
       userName: "Admin",
-      text: `${userName} joined`
+      text: `${userName} joined`,
     });
   });
 
-  socket.on("translationOn", translationOn => {
+  socket.on("translationOn", (translationOn) => {
     toogleTranslation(socket.id, translationOn);
   });
 
   socket.on("message", ({ text, userName, roomName }) => {
     const users = getUsersInRoom(socket.id);
 
-    users.forEach(async user => {
+    users.forEach(async (user) => {
       if (user.id === socket.id || !user.translationOn) {
         io.to(`${user.id}`).emit("message", {
           userName,
-          text
+          text,
         });
       } else {
         const translatedText = await translateText(
@@ -66,13 +76,13 @@ io.on("connection", socket => {
         );
         io.to(`${user.id}`).emit("message", {
           userName,
-          text: translatedText[0]
+          text: translatedText[0],
         });
       }
     });
   });
 
-  socket.on("setLanguage", language => {
+  socket.on("setLanguage", (language) => {
     setUserLanguage(socket.id, language);
   });
 

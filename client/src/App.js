@@ -9,15 +9,17 @@ import Chat from "./components/chat/chat.component";
 
 import "./App.scss";
 
-const newSocket = io("http://localhost:5000");
+const local = "http://localhost:8080/";
+
+const newSocket = io(local, { transports: ["websocket"] });
 
 const App = () => {
-  const [socket] = useState(newSocket);
+  const socket = newSocket;
   const [userName, setUserName] = useState("");
   const [roomName, setRoomName] = useState("");
   const [language, setLanguage] = useState("");
 
-  const setNewLanguage = event => {
+  const setNewLanguage = (event) => {
     setLanguage(event.target.value);
     socket.emit("setLanguage", event.target.value);
   };

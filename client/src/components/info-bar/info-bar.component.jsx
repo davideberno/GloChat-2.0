@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./info-bar.styles.scss";
 
 import languages from "../../languages";
 
 const InfoBar = ({ userName, language, setLanguage, socket }) => {
-  const [translationOn, setTranslationOn] = useState(true);
+  const [translationOn, setTranslationOn] = useState(false);
 
-  const toogleTranslation = () => {
-    setTranslationOn(p => !p);
+  useEffect(() => {
     socket.emit("translationOn", translationOn);
-  };
+  }, [socket, translationOn]);
 
   return (
     <div className="info-bar">
@@ -23,7 +22,7 @@ const InfoBar = ({ userName, language, setLanguage, socket }) => {
             name="translationOn"
             id="translationOn"
             checked={translationOn}
-            onChange={toogleTranslation}
+            onChange={() => setTranslationOn(!translationOn)}
           />
         </div>
         <div className="info-bar-item">
@@ -33,7 +32,7 @@ const InfoBar = ({ userName, language, setLanguage, socket }) => {
             id="defaultanguage"
             value={language}
             name="defaultLanguage"
-            onChange={event => setLanguage(event)}
+            onChange={(event) => setLanguage(event)}
           >
             {Object.keys(languages).map((lang, i) => (
               <option key={i}>{lang}</option>
