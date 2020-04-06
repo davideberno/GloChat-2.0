@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 
-import { Link, useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import Alert from "@material-ui/lab/Alert";
+import SelectLanguage from "../select-language/select-language.comcponent";
 
 import "./join-room.styles.scss";
-
-import languages from "../../languages";
 
 const JoinRoom = ({ socket }) => {
   const [userName, setUserName] = useState("");
   const [roomName, setRoomName] = useState("");
-  const [defaultLanguage, setDefaultLanguage] = useState("English");
+  const [language, setLanguage] = useState("English");
   const [warning, setWarning] = useState("");
 
   const { roomId } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     if (roomId) {
@@ -23,20 +23,29 @@ const JoinRoom = ({ socket }) => {
   }, [roomId]);
 
   useEffect(() => {
-    socket.on("warning", warning => {
+    socket.on("warning", (warning) => {
       setWarning(warning);
-
-      setTimeout(() => {
-        setWarning("");
-      }, 2000);
     });
   });
 
-  const handleSubmit = () => {
-    socket.emit("join", { userName, roomName, defaultLanguage });
+  const handleWarning = (event) => {
+    event.preventDefault();
+    if (userName) {
+      setWarning("Room name missing!");
+    } else if (roomName) {
+      setWarning("Username missing!");
+    } else {
+      setWarning("Username and room name missing!");
+    }
   };
 
-  const generateRoom = event => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    socket.emit("join", { userName, roomName, language });
+    history.push(`/chat/${roomName}`);
+  };
+
+  const generateRoom = (event) => {
     event.preventDefault();
     const randomRoom = Math.floor(Math.random() * Math.pow(10, 6)).toString();
     setRoomName(randomRoom);
@@ -54,7 +63,7 @@ const JoinRoom = ({ socket }) => {
             id="userName"
             name="userName"
             value={userName}
-            onChange={event => setUserName(event.target.value)}
+            onChange={(event) => setUserName(event.target.value)}
           />
           <label htmlFor="roomName">Room name:</label>
           <input
@@ -62,28 +71,25 @@ const JoinRoom = ({ socket }) => {
             id="roomName"
             name="roomName"
             value={roomName}
-            onChange={event => setRoomName(event.target.value)}
+            onChange={(event) => setRoomName(event.target.value)}
           />
-
-          <div className="generate-room">
-            <button onClick={e => generateRoom(e)}>Generate a room</button>
-          </div>
-          <label htmlFor="default-language">Select your language:</label>
-          <select
-            id="default-language"
-            value={defaultLanguage}
-            name="defaultLanguage"
-            onChange={event => setDefaultLanguage(event.target.value)}
+          {!roomName ? (
+            <div className="generate-room">
+              <button onClick={(e) => generateRoom(e)}>Generate a room</button>
+            </div>
+          ) : null}
+          <SelectLanguage
+            socket={socket}
+            language={language}
+            setLanguage={setLanguage}
+            translationOn
+          />
+          <button
+            className="join-button"
+            onClick={userName && roomName ? handleSubmit : handleWarning}
           >
-            {Object.keys(languages).map((lang, i) => (
-              <option key={i}>{lang}</option>
-            ))}
-          </select>
-          <Link to={`/chat/${roomName}`}>
-            <button className="join-button" onClick={handleSubmit}>
-              Join
-            </button>
-          </Link>
+            Join
+          </button>
         </form>
       </div>
     </>

@@ -19,7 +19,7 @@ const addUser = ({ userName, roomName, id, language }) => {
   } else if (existingUser) {
     return { error: "Username already taken!" };
   } else {
-    const user = { userName, roomName, id, language, translationOn: true };
+    const user = { userName, roomName, id, language, translationOn: false };
     users.push(user);
     const filteredUsers = getUsersInRoom(id);
     return { users: filteredUsers };

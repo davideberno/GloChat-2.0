@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import IsTyping from "../is-typing/is-typing.component";
 
@@ -9,7 +9,22 @@ import "./message-input.styles.scss";
 const MessageInput = ({ socket, userName, roomName, language }) => {
   const [message, setMessage] = useState("");
 
-  const handleChange = event => {
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSubmitMessage();
+    }
+  };
+
+  const handleChange = (event) => {
     socket.emit("isTyping", { userName, roomName });
 
     setMessage(event.target.value);
@@ -21,7 +36,7 @@ const MessageInput = ({ socket, userName, roomName, language }) => {
         userName,
         language,
         roomName,
-        text: message
+        text: message,
       });
       setMessage("");
     }

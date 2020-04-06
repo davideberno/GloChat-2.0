@@ -6,17 +6,23 @@ const express = require("express");
 
 const app = express();
 
-const http = require("http").createServer(app);
-
-const PORT = process.env.PORT || 8080;
-
 app.use(express.static(path.join(__dirname, "/client/build")));
 
-const io = require("socket.io")(http);
+const server = require("http").Server(app);
+
+const io = require("socket.io")(server);
 
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/build/index.html"));
 });
+
+if (module === require.main) {
+  const PORT = process.env.PORT || 8080;
+  server.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}`);
+    console.log("Press Ctrl+C to quit.");
+  });
+}
 
 const translateText = require("./goole-translate/translateText");
 const { languages } = require("./goole-translate/languages-server");
@@ -32,11 +38,11 @@ const {
 io.on("connection", (socket) => {
   console.log(`${socket.id} connected`);
 
-  socket.on("join", ({ userName, roomName, defaultLanguage }) => {
+  socket.on("join", ({ userName, roomName, language }) => {
     const { error, users } = addUser({
       userName,
       roomName,
-      language: defaultLanguage,
+      language,
       id: socket.id,
     });
 
@@ -46,7 +52,7 @@ io.on("connection", (socket) => {
 
     socket.join(roomName);
 
-    socket.emit("joinedRoom", { userName, roomName, defaultLanguage });
+    socket.emit("joinedRoom", { userName, roomName, language });
 
     io.to(roomName).emit("roomUsers", users);
 
@@ -98,5 +104,3 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-http.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

@@ -11,7 +11,9 @@ import "./App.scss";
 
 const local = "http://localhost:8080/";
 
-const newSocket = io(local, { transports: ["websocket"] });
+//const url = "https://glochat2-1585614391026.appspot.com/";
+
+const newSocket = io(local);
 
 const App = () => {
   const socket = newSocket;
@@ -19,16 +21,11 @@ const App = () => {
   const [roomName, setRoomName] = useState("");
   const [language, setLanguage] = useState("");
 
-  const setNewLanguage = (event) => {
-    setLanguage(event.target.value);
-    socket.emit("setLanguage", event.target.value);
-  };
-
   useEffect(() => {
-    socket.on("joinedRoom", ({ userName, roomName, defaultLanguage }) => {
+    socket.on("joinedRoom", ({ userName, roomName, language }) => {
       setUserName(userName);
       setRoomName(roomName);
-      setLanguage(defaultLanguage);
+      setLanguage(language);
     });
 
     return () => {
@@ -48,7 +45,7 @@ const App = () => {
             userName={userName}
             roomName={roomName}
             language={language}
-            setLanguage={setNewLanguage}
+            setLanguage={setLanguage}
           />
         )}
       />
