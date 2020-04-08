@@ -2,7 +2,7 @@ import translationActionTypes from "./translation.types";
 
 const INITIAL_STATE = {
   language: "English",
-  on: true,
+  on: false,
 };
 
 const translationReducer = (state = INITIAL_STATE, action) => {
@@ -15,7 +15,7 @@ const translationReducer = (state = INITIAL_STATE, action) => {
     case translationActionTypes.TOOGLE_TRANSLATION:
       return {
         ...state,
-        on: !action.payload,
+        on: action.payload,
       };
     default:
       return state;

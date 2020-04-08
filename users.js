@@ -1,47 +1,58 @@
 const users = [];
-//Get user socket id and returns user Object
-const getUser = (id) => {
-  return users.find((user) => user.id === id);
+
+const getUser = (userName) => {
+  return users.find(
+    (user) => user.userName.toLowerCase() === userName.toLowerCase()
+  );
 };
-//Get user socket id and returns all users in current room.
-const getUsersInRoom = (id) => {
-  const user = getUser(id);
+
+const getUsersInRoom = (userName) => {
+  const user = getUser(userName);
   return users.filter((u) => u.roomName === user.roomName);
 };
-//Get an user Object and returns updated users list
-const addUser = ({ userName, roomName, id, language }) => {
-  const existingUser = users.find(
-    (u) => u.userName.toLowerCase() === userName.toLowerCase()
-  );
 
-  if (!userName || !roomName) {
-    return { error: "Username or room missing!" };
-  } else if (existingUser) {
+const addUser = ({ userName, roomName, language, socketId }) => {
+  const existingUser = getUser(userName);
+
+  if (existingUser) {
     return { error: "Username already taken!" };
   } else {
-    const user = { userName, roomName, id, language, translationOn: false };
+    const user = {
+      userName,
+      roomName,
+      language,
+      socketId,
+      translationOn: false,
+    };
     users.push(user);
-    const filteredUsers = getUsersInRoom(id);
-    return { users: filteredUsers };
+    return { user };
   }
 };
-//Get user socket id and choosen language, and returns the user Object
-const setUserLanguage = (id, lang) => {
-  const user = getUser(id);
+
+const setUserLanguage = (userName, language) => {
+  const user = getUser(userName);
   if (user) {
-    user.language = lang;
+    user.language = language;
   }
   return user;
 };
-//Get user socket and translation boolean, returns user Object
-const toogleTranslation = (id, translationOn) => {
-  const user = getUser(id);
+
+const toogleTranslation = (userName) => {
+  const user = getUser(userName);
   if (user) {
-    user.translationOn = translationOn;
+    user.translationOn = !user.translationOn;
   }
   return user;
 };
-//Get user socket id and returns the user Object and the updated users list
+
+const setUserSocketId = (userName, id) => {
+  const user = getUser(userName);
+  if (user) {
+    user.socketId = id;
+  }
+  return user;
+};
+
 const deleteUser = (id) => {
   const index = users.findIndex((u) => u.id === id);
   const user = users.splice(index, 1)[0];
@@ -50,6 +61,7 @@ const deleteUser = (id) => {
 
 module.exports = {
   addUser,
+  setUserSocketId,
   deleteUser,
   getUser,
   setUserLanguage,

@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
+
+import axios from "axios";
 
 import Alert from "@material-ui/lab/Alert";
 import SelectLanguage from "../select-language/select-language.comcponent";
 
 import { selectCurrentSocket } from "../../redux/socket/socket.selectors";
+import { selectTranslationLanguage } from "../../redux/translation/translation.selectors";
+
+import { setCurrentUser } from "../../redux/user/user.actions";
+import { setCurrentRoom } from "../../redux/room/room.actions";
+import { setCurrentLanguage } from "../../redux/translation/translation.actions";
 
 import "./join-room.styles.scss";
 
 const JoinRoom = () => {
   const socket = useSelector(selectCurrentSocket);
+  const language = useSelector(selectTranslationLanguage);
   const [userName, setUserName] = useState("");
   const [roomName, setRoomName] = useState("");
-  const [language, setLanguage] = useState("English");
   const [warning, setWarning] = useState("");
+
+  const dispatch = useDispatch();
 
   const { roomId } = useParams();
   const history = useHistory();
@@ -24,12 +33,6 @@ const JoinRoom = () => {
       setRoomName(roomId);
     }
   }, [roomId]);
-
-  useEffect(() => {
-    socket.on("warning", (warning) => {
-      setWarning(warning);
-    });
-  });
 
   const handleWarning = (event) => {
     event.preventDefault();
@@ -44,8 +47,21 @@ const JoinRoom = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    socket.emit("join", { userName, roomName, language });
-    history.push(`/chat/${roomName}`);
+    axios
+      .post("/user", { userName, roomName, language, socketId: socket.id })
+      .then((res) => {
+        const { userName, roomName, language, error } = res.data;
+        if (error) {
+          setWarning(error);
+        } else {
+          dispatch(setCurrentUser(userName));
+          dispatch(setCurrentLanguage(language));
+          dispatch(setCurrentRoom(roomName));
+          socket.emit("join", { userName, roomName });
+          history.push(`/chat/${roomName}`);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const generateRoom = (event) => {
@@ -81,12 +97,6 @@ const JoinRoom = () => {
               <button onClick={(e) => generateRoom(e)}>Generate a room</button>
             </div>
           ) : null}
-          <SelectLanguage
-            socket={socket}
-            language={language}
-            setLanguage={setLanguage}
-            translationOn
-          />
           <button
             className="join-button"
             onClick={userName && roomName ? handleSubmit : handleWarning}

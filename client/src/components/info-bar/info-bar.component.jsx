@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+
+import axios from "axios";
 
 import SelectLanguage from "../select-language/select-language.comcponent";
 
-import { selectCurrentSocket } from "../../redux/socket/socket.selectors";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { selectTranslationOn } from "../../redux/translation/translation.selectors";
 
@@ -12,14 +13,16 @@ import { toogleTranslation } from "../../redux/translation/translation.actions";
 import "./info-bar.styles.scss";
 
 const InfoBar = () => {
-  const socket = useSelector(selectCurrentSocket);
   const userName = useSelector(selectCurrentUser);
   const translationOn = useSelector(selectTranslationOn);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    socket.emit("translationOn", translationOn);
-  }, [translationOn, socket]);
+  const handleChange = () => {
+    axios
+      .post("translationOn", { userName })
+      .then((res) => dispatch(toogleTranslation(res.data.translationOn)))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="info-bar">
@@ -32,7 +35,7 @@ const InfoBar = () => {
             name="translationOn"
             id="translationOn"
             checked={translationOn}
-            onChange={() => dispatch(toogleTranslation(translationOn))}
+            onChange={handleChange}
           />
         </div>
         <SelectLanguage />

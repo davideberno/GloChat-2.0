@@ -1,6 +1,6 @@
-import io from "socket.io-client";
-
 import socketActionTypes from "./socket.types";
+
+import io from "socket.io-client";
 
 const INITIAL_STATE = {
   currentSocket: io("http://localhost:8080/"),
