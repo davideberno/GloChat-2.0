@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import SelectLanguage from "../select-language/select-language.comcponent";
 
+import { selectCurrentSocket } from "../../redux/socket/socket.selectors";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
+import { selectTranslationOn } from "../../redux/translation/translation.selectors";
+
+import { toogleTranslation } from "../../redux/translation/translation.actions";
+
 import "./info-bar.styles.scss";
 
-const InfoBar = ({ userName, language, setLanguage, socket }) => {
-  const [translationOn, setTranslationOn] = useState(false);
+const InfoBar = () => {
+  const socket = useSelector(selectCurrentSocket);
+  const userName = useSelector(selectCurrentUser);
+  const translationOn = useSelector(selectTranslationOn);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     socket.emit("translationOn", translationOn);
-  }, [socket, translationOn]);
+  }, [translationOn, socket]);
 
   return (
     <div className="info-bar">
@@ -22,15 +32,10 @@ const InfoBar = ({ userName, language, setLanguage, socket }) => {
             name="translationOn"
             id="translationOn"
             checked={translationOn}
-            onChange={() => setTranslationOn(!translationOn)}
+            onChange={() => dispatch(toogleTranslation(translationOn))}
           />
         </div>
-        <SelectLanguage
-          socket={socket}
-          language={language}
-          setLanguage={setLanguage}
-          translationOn={translationOn}
-        />
+        <SelectLanguage />
       </div>
     </div>
   );

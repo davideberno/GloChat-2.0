@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-
+import { useSelector } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 
 import Alert from "@material-ui/lab/Alert";
 import SelectLanguage from "../select-language/select-language.comcponent";
 
+import { selectCurrentSocket } from "../../redux/socket/socket.selectors";
+
 import "./join-room.styles.scss";
 
-const JoinRoom = ({ socket }) => {
+const JoinRoom = () => {
+  const socket = useSelector(selectCurrentSocket);
   const [userName, setUserName] = useState("");
   const [roomName, setRoomName] = useState("");
   const [language, setLanguage] = useState("English");

@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import IsTyping from "../is-typing/is-typing.component";
-
 import Button from "@material-ui/core/Button";
+
+import { selectCurrentSocket } from "../../redux/socket/socket.selectors";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
+import { selectTranslationLanguage } from "../../redux/translation/translation.selectors";
+import { selectRoomName } from "../../redux/room/room.selectors";
 
 import "./message-input.styles.scss";
 
-const MessageInput = ({ socket, userName, roomName, language }) => {
+const MessageInput = () => {
+  const socket = useSelector(selectCurrentSocket);
+  const userName = useSelector(selectCurrentUser);
+  const language = useSelector(selectTranslationLanguage);
+  const roomName = useSelector(selectRoomName);
+
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -44,7 +54,7 @@ const MessageInput = ({ socket, userName, roomName, language }) => {
 
   return (
     <form className="message-form">
-      <IsTyping socket={socket} />
+      <IsTyping />
       <input
         id="message"
         name="message"

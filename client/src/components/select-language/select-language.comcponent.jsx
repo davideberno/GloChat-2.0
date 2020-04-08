@@ -1,12 +1,27 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { selectCurrentSocket } from "../../redux/socket/socket.selectors";
+import {
+  selectTranslationLanguage,
+  selectTranslationOn,
+} from "../../redux/translation/translation.selectors";
+
+import { setCurrentLanguage } from "../../redux/translation/translation.actions";
 
 import languages from "../../languages";
 
 import "./select-language.styles.scss";
 
-const SelectLanguage = ({ socket, language, setLanguage, translationOn }) => {
+const SelectLanguage = () => {
+  const socket = useSelector(selectCurrentSocket);
+  const language = useSelector(selectTranslationLanguage);
+  const translationOn = useSelector(selectTranslationOn);
+
+  const dispatch = useDispatch();
+
   const setNewLanguage = (event) => {
-    setLanguage(event.target.value);
+    dispatch(setCurrentLanguage(event.target.value));
     socket.emit("setLanguage", event.target.value);
   };
   return (

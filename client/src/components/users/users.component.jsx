@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+
+import { selectCurrentSocket } from "../../redux/socket/socket.selectors";
 
 import "./users.styles.scss";
 
-const Users = ({ socket }) => {
+const Users = () => {
+  const socket = useSelector(selectCurrentSocket);
+
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    socket.on("roomUsers", users => {
+    socket.on("roomUsers", (users) => {
       setUsers(users);
     });
   }, [socket]);

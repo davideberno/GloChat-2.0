@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Messages from "../messages/messages.component";
 import InfoBar from "../info-bar/info-bar.component";
@@ -6,28 +7,21 @@ import Users from "../users/users.component";
 import MessageInput from "../message-input/message-input.component";
 import JoinRoom from "../join-room/join-room.component";
 
+import { selectRoomName } from "../../redux/room/room.selectors";
+
 import "./chat.styles.scss";
 
-const Chat = ({ socket, userName, roomName, language, setLanguage }) => {
+const Chat = () => {
+  const roomName = useSelector(selectRoomName);
   return (
     <>
       <div className="chat-container">
-        <InfoBar
-          userName={userName}
-          language={language}
-          socket={socket}
-          setLanguage={setLanguage}
-        />
-        <Users socket={socket} />
-        <Messages socket={socket} userName={userName} />
-        <MessageInput
-          socket={socket}
-          userName={userName}
-          roomName={roomName}
-          language={language}
-        />
+        <InfoBar />
+        <Users />
+        <Messages />
+        <MessageInput />
       </div>
-      {!roomName ? <JoinRoom socket={socket} absolute /> : null}
+      {!roomName ? <JoinRoom absolute /> : null}
     </>
   );
 };
