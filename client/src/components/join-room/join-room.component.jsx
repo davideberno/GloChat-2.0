@@ -5,7 +5,6 @@ import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 
 import Alert from "@material-ui/lab/Alert";
-import SelectLanguage from "../select-language/select-language.comcponent";
 
 import { selectCurrentSocket } from "../../redux/socket/socket.selectors";
 import { selectTranslationLanguage } from "../../redux/translation/translation.selectors";
@@ -13,6 +12,8 @@ import { selectTranslationLanguage } from "../../redux/translation/translation.s
 import { setCurrentUser } from "../../redux/user/user.actions";
 import { setCurrentRoom } from "../../redux/room/room.actions";
 import { setCurrentLanguage } from "../../redux/translation/translation.actions";
+
+import { signInWithGoogle } from "../../firebase/firebase.utils";
 
 import "./join-room.styles.scss";
 
@@ -104,6 +105,7 @@ const JoinRoom = () => {
             Join
           </button>
         </form>
+        <button onClick={signInWithGoogle}>SIGN IN WITH GOOGLE</button>
       </div>
     </>
   );
