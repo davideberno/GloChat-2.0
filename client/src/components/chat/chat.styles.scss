@@ -1,11 +1,28 @@
-.chat-container {
-  width: 60%;
-  height: 80%;
-  border-radius: 10px;
-  box-shadow: 0px 0px 8px 2px lightgrey;
+.chat {
   display: grid;
-  grid-template-columns: 30% 70%;
-  grid-template-rows: 15% 70% 15%;
-  padding: 10px;
-  position: relative;
+  grid-template-columns: 25% 75%;
+  grid-template-rows: 10% 80% 10%;
+  flex: 1 1 auto;
+  .chats {
+    grid-area: 1/1/4/2;
+  }
+  .messages {
+    grid-area: 2/2/3/3;
+  }
+
+  .translation {
+    grid-area: 1/2/2/3;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 25px;
+  }
+
+  .message-input {
+    grid-area: 3/2/4/3;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    position: relative;
+  }
 }

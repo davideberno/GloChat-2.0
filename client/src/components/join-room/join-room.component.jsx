@@ -13,11 +13,41 @@ import { setCurrentUser } from "../../redux/user/user.actions";
 import { setCurrentRoom } from "../../redux/room/room.actions";
 import { setCurrentLanguage } from "../../redux/translation/translation.actions";
 
-import { signInWithGoogle } from "../../firebase/firebase.utils";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import ChatIcon from "@material-ui/icons/Chat";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 
 import "./join-room.styles.scss";
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(4),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.main,
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
+
 const JoinRoom = () => {
+  const classes = useStyles();
   const socket = useSelector(selectCurrentSocket);
   const language = useSelector(selectTranslationLanguage);
   const [userName, setUserName] = useState("");
@@ -35,16 +65,16 @@ const JoinRoom = () => {
     }
   }, [roomId]);
 
-  const handleWarning = (event) => {
-    event.preventDefault();
-    if (userName) {
-      setWarning("Room name missing!");
-    } else if (roomName) {
-      setWarning("Username missing!");
-    } else {
-      setWarning("Username and room name missing!");
-    }
-  };
+  // const handleWarning = (event) => {
+  //   event.preventDefault();
+  //   if (userName) {
+  //     setWarning("Room name missing!");
+  //   } else if (roomName) {
+  //     setWarning("Username missing!");
+  //   } else {
+  //     setWarning("Username and room name missing!");
+  //   }
+  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -72,42 +102,97 @@ const JoinRoom = () => {
   };
 
   return (
-    <>
-      <div className="join-room-background" />
-      <div className="join-room">
-        <h2>Join a chat room</h2>
-        {warning ? <Alert severity="warning">{warning}</Alert> : null}
-        <form>
-          <label htmlFor="userName">User name:</label>
-          <input
-            id="userName"
-            name="userName"
+    // <>
+    //   <div className="join-room-background" />
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <ChatIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Join room
+        </Typography>
+        <form className={classes.form} onSubmit={handleSubmit}>
+          {warning ? <Alert severity="warning">{warning}</Alert> : null}
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Username"
+            autoFocus
             value={userName}
             onChange={(event) => setUserName(event.target.value)}
           />
-          <label htmlFor="roomName">Room name:</label>
-          <input
-            disabled={roomId ? true : false}
-            id="roomName"
-            name="roomName"
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Choose room name"
             value={roomName}
             onChange={(event) => setRoomName(event.target.value)}
           />
+          <Typography variant="subtitle1" gutterBottom>
+            Or generate one :
+          </Typography>
           {!roomName ? (
-            <div className="generate-room">
-              <button onClick={(e) => generateRoom(e)}>Generate a room</button>
-            </div>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={(e) => generateRoom(e)}
+            >
+              Generate
+            </Button>
           ) : null}
-          <button
-            className="join-button"
-            onClick={userName && roomName ? handleSubmit : handleWarning}
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
           >
             Join
-          </button>
+          </Button>
         </form>
-        <button onClick={signInWithGoogle}>SIGN IN WITH GOOGLE</button>
       </div>
-    </>
+    </Container>
+    //   <div className="join-room">
+    //     <h2>Join a chat room</h2>
+    //     {warning ? <Alert severity="warning">{warning}</Alert> : null}
+    //     <form>
+    //       <label htmlFor="userName">User name:</label>
+    //       <input
+    //         id="userName"
+    //         name="userName"
+    //         value={userName}
+    //         onChange={(event) => setUserName(event.target.value)}
+    //       />
+    //       <label htmlFor="roomName">Room name:</label>
+    //       <input
+    //         disabled={roomId ? true : false}
+    //         id="roomName"
+    //         name="roomName"
+    //         value={roomName}
+    //         onChange={(event) => setRoomName(event.target.value)}
+    //       />
+    //       {!roomName ? (
+    //         <div className="generate-room">
+    //           <button onClick={(e) => generateRoom(e)}>Generate a room</button>
+    //         </div>
+    //       ) : null}
+    //       <button
+    //         className="join-button"
+    //         onClick={userName && roomName ? handleSubmit : handleWarning}
+    //       >
+    //         Join
+    //       </button>
+    //     </form>
+    //   </div>
+    // </>
   );
 };
 

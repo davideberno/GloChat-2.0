@@ -1,11 +1,10 @@
 .users {
-  border: 1px solid lightgrey;
   border-radius: 10px;
-  grid-area: 2/1/4/2;
+  // grid-area: 2/1/4/2;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
 
-  h4 {
-    margin: 20px 10px;
-  }
   .users-list {
     list-style: none;
     padding: 10px;

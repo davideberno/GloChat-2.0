@@ -1,43 +1,16 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import Copyright from "../copyright/copyright.component";
-
+import CssBaseline from "@material-ui/core/CssBaseline";
 import ChatIcon from "@material-ui/icons/Chat";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(2),
-    backgroundColor: theme.palette.primary.main,
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-  },
-  form: {
-    width: "100%",
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  link: {
-    cursor: "pointer",
-  },
-}));
+import useStyles from "./signin.styles";
 
 const SignIn = () => {
   const classes = useStyles();
@@ -54,6 +27,7 @@ const SignIn = () => {
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
+        <CssBaseline />
         <Avatar className={classes.avatar}>
           <ChatIcon />
         </Avatar>
@@ -66,10 +40,8 @@ const SignIn = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
             label="Email Address"
             name="email"
-            autoComplete="email"
             autoFocus
             onChange={(event) => setEmail(event.target.value)}
           />
@@ -78,11 +50,8 @@ const SignIn = () => {
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
-            id="password"
-            autoComplete="current-password"
             onChange={(event) => setPassword(event.target.value)}
           />
           <Button
@@ -107,9 +76,6 @@ const SignIn = () => {
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 };

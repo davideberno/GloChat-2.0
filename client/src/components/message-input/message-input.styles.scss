@@ -1,13 +1,13 @@
 .message-form {
-  grid-area: 3/2/4/4;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  width: 100%;
 
   input {
     width: 70%;
-    height: 40px;
+    height: 2.5rem;
     font-size: 1.1rem;
     border-radius: 20px;
     border: 1px solid lightgrey;

@@ -14,16 +14,32 @@ import { setCurrentLanguage } from "../../redux/translation/translation.actions"
 
 import languages from "../../languages";
 
-import "./select-language.styles.scss";
+import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(6),
+    minWidth: 140,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 const SelectLanguage = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
   const userName = useSelector(selectCurrentUser);
   const language = useSelector(selectTranslationLanguage);
   const translationOn = useSelector(selectTranslationOn);
 
-  const dispatch = useDispatch();
-
   const setNewLanguage = (event) => {
+    console.log(event.target.value);
     axios
       .post("/language", { userName, language: event.target.value })
       .then((res) => dispatch(setCurrentLanguage(res.data.language)))
@@ -31,20 +47,21 @@ const SelectLanguage = () => {
   };
 
   return (
-    <div className="select-language">
-      <label htmlFor="default-language">Select your language</label>
-      <select
+    <FormControl className={classes.formControl}>
+      <InputLabel id="language-select">Language</InputLabel>
+      <Select
         disabled={translationOn ? false : true}
-        id="default-language"
-        name="defaultLanguage"
+        labelId="language-select"
         value={language}
-        onChange={(event) => setNewLanguage(event)}
+        onChange={setNewLanguage}
       >
         {Object.keys(languages).map((lang, i) => (
-          <option key={i}>{lang}</option>
+          <MenuItem key={i} value={lang}>
+            {lang}
+          </MenuItem>
         ))}
-      </select>
-    </div>
+      </Select>
+    </FormControl>
   );
 };
 
