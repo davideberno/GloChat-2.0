@@ -2,16 +2,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 
-const config = {
-  apiKey: "AIzaSyArOLDYSZUgLD9mQcI4BnF4P4QnTa5Iig0",
-  authDomain: "glochat-2auth.firebaseapp.com",
-  databaseURL: "https://glochat-2auth.firebaseio.com",
-  projectId: "glochat-2auth",
-  storageBucket: "glochat-2auth.appspot.com",
-  messagingSenderId: "645453272459",
-  appId: "1:645453272459:web:62dc1a3184d38383bf0b8e",
-  measurementId: "G-JZ2HWLNQEE",
-};
+const config = {};
 
 firebase.initializeApp(config);
 
