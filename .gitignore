@@ -24,3 +24,5 @@ yarn-error.log*
 .gcloudignore
 
 app.yaml
+
+client/src/firebase/firebase.utils.js
