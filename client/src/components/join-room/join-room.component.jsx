@@ -21,6 +21,9 @@ import ChatIcon from "@material-ui/icons/Chat";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
+
+import Copyright from "../copyright/copyright.component";
 
 import "./join-room.styles.scss";
 
@@ -65,17 +68,6 @@ const JoinRoom = () => {
     }
   }, [roomId]);
 
-  // const handleWarning = (event) => {
-  //   event.preventDefault();
-  //   if (userName) {
-  //     setWarning("Room name missing!");
-  //   } else if (roomName) {
-  //     setWarning("Username missing!");
-  //   } else {
-  //     setWarning("Username and room name missing!");
-  //   }
-  // };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
@@ -102,8 +94,6 @@ const JoinRoom = () => {
   };
 
   return (
-    // <>
-    //   <div className="join-room-background" />
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -159,40 +149,10 @@ const JoinRoom = () => {
           </Button>
         </form>
       </div>
+      <Box mt={4}>
+        <Copyright />
+      </Box>
     </Container>
-    //   <div className="join-room">
-    //     <h2>Join a chat room</h2>
-    //     {warning ? <Alert severity="warning">{warning}</Alert> : null}
-    //     <form>
-    //       <label htmlFor="userName">User name:</label>
-    //       <input
-    //         id="userName"
-    //         name="userName"
-    //         value={userName}
-    //         onChange={(event) => setUserName(event.target.value)}
-    //       />
-    //       <label htmlFor="roomName">Room name:</label>
-    //       <input
-    //         disabled={roomId ? true : false}
-    //         id="roomName"
-    //         name="roomName"
-    //         value={roomName}
-    //         onChange={(event) => setRoomName(event.target.value)}
-    //       />
-    //       {!roomName ? (
-    //         <div className="generate-room">
-    //           <button onClick={(e) => generateRoom(e)}>Generate a room</button>
-    //         </div>
-    //       ) : null}
-    //       <button
-    //         className="join-button"
-    //         onClick={userName && roomName ? handleSubmit : handleWarning}
-    //       >
-    //         Join
-    //       </button>
-    //     </form>
-    //   </div>
-    // </>
   );
 };
 

@@ -9,7 +9,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import PersonIcon from "@material-ui/icons/Person";
+import Typography from "@material-ui/core/Typography";
 
 import "./users.styles.scss";
 
@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
+  },
+  avatar: {
+    color: "white",
+    backgroundColor: theme.palette.primary.main,
   },
 }));
 
@@ -35,13 +39,16 @@ const Users = () => {
 
   return (
     <div className="users">
+      <Typography component="h1" variant="h5">
+        Users:
+      </Typography>
       <List dense className={classes.root}>
         {users.map((user, i) => {
           return (
             <ListItem key={i} button>
               <ListItemAvatar>
-                <Avatar>
-                  <PersonIcon />
+                <Avatar className={classes.avatar}>
+                  {user.userName[0].toUpperCase()}
                 </Avatar>
               </ListItemAvatar>
               <ListItemText

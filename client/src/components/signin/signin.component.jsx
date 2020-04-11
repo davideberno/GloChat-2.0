@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import { auth } from "../../firebase/firebase.utils";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
 import ChatIcon from "@material-ui/icons/Chat";
 import Avatar from "@material-ui/core/Avatar";
@@ -10,7 +12,36 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
 import useStyles from "./signin.styles";
+import { makeStyles } from "@material-ui/core/styles";
+
+import Copyright from "../copyright/copyright.component";
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(4),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.main,
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  link: {
+    cursor: "pointer",
+  },
+}));
 
 const SignIn = () => {
   const classes = useStyles();
@@ -19,9 +50,17 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({ email, password });
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+
+      setEmail("");
+      setPassword("");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -63,6 +102,7 @@ const SignIn = () => {
           >
             Sign In
           </Button>
+
           <Grid container>
             <Grid item>
               <Link
@@ -76,6 +116,9 @@ const SignIn = () => {
           </Grid>
         </form>
       </div>
+      <Box mt={4}>
+        <Copyright />
+      </Box>
     </Container>
   );
 };
