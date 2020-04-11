@@ -3,8 +3,12 @@
   grid-template-columns: 25% 75%;
   grid-template-rows: 10% 80% 10%;
   flex: 1 1 auto;
+  @media screen and (min-width: 992px) {
+    margin: 0 35px;
+  }
+
   .chats {
-    grid-area: 1/1/4/2;
+    grid-area: 2/1/4/2;
   }
   .messages {
     grid-area: 2/2/3/3;
@@ -15,7 +19,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0 25px;
   }
 
   .message-input {
