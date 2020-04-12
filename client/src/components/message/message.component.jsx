@@ -18,6 +18,18 @@ const Message = ({ msg, userName }) => (
     >
       {msg.text}
     </div>
+    {msg.translatedText ? (
+      <>
+        <div className="sender-username">Translation:</div>
+        <div
+          className={`message translatedText ${
+            userName === msg.userName ? "outgoing" : "incoming"
+          }`}
+        >
+          {msg.translatedText}
+        </div>
+      </>
+    ) : null}
   </div>
 );
 

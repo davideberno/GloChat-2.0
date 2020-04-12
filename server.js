@@ -97,7 +97,8 @@ io.on("connection", (socket) => {
         );
         io.to(`${user.socketId}`).emit("message", {
           userName,
-          text: translatedText[0],
+          text,
+          translatedText: translatedText[0],
         });
       }
     });
