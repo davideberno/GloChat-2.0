@@ -45,14 +45,6 @@ const toogleTranslation = (userName) => {
   return user;
 };
 
-const setUserSocketId = (userName, id) => {
-  const user = getUser(userName);
-  if (user) {
-    user.socketId = id;
-  }
-  return user;
-};
-
 const deleteUser = (id) => {
   const index = users.findIndex((u) => u.id === id);
   const user = users.splice(index, 1)[0];
@@ -61,7 +53,6 @@ const deleteUser = (id) => {
 
 module.exports = {
   addUser,
-  setUserSocketId,
   deleteUser,
   getUser,
   setUserLanguage,

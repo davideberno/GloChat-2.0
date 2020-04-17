@@ -15,7 +15,6 @@ const {
   setUserLanguage,
   getUsersInRoom,
   toogleTranslation,
-  setUserSocketId,
 } = require("./users");
 
 const app = express();
@@ -77,11 +76,11 @@ io.on("connection", (socket) => {
 
     socket.to(roomName).emit("message", {
       userName: "Admin",
-      text: `${userName} joined`,
+      text: `${userName} joined the room.`,
     });
   });
 
-  socket.on("message", ({ text, userName, roomName }) => {
+  socket.on("message", ({ text, userName }) => {
     const users = getUsersInRoom(userName);
 
     users.forEach(async (user) => {
@@ -113,6 +112,10 @@ io.on("connection", (socket) => {
     const { user, users } = deleteUser(socket.id);
     if (user) {
       io.to(user.roomName).emit("roomUsers", users);
+      io.to(user.roomName).emit("message", {
+        userName: "Admin",
+        text: `${user.userName} left the room.`,
+      });
     }
   });
 });

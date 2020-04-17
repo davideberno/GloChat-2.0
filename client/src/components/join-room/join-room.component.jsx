@@ -25,8 +25,6 @@ import Box from "@material-ui/core/Box";
 
 import Copyright from "../copyright/copyright.component";
 
-import "./join-room.styles.scss";
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(4),

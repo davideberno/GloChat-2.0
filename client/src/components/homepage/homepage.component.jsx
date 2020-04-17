@@ -43,26 +43,6 @@ const Homepage = () => {
           GloChat
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={() => history.push("/signin")}
-            >
-              Sign In
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={() => history.push("/signup")}
-            >
-              Sign Up
-            </Button>
-          </Grid>
           <Grid item xs={12}>
             <Button
               fullWidth
