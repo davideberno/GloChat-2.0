@@ -3,7 +3,7 @@ import socketActionTypes from "./socket.types";
 import io from "socket.io-client";
 
 const INITIAL_STATE = {
-  currentSocket: io("https://glochat2-1585614391026.appspot.com/"),
+  currentSocket: io("https://glochat2.herokuapp.com//"),
 };
 
 const socketReducer = (state = INITIAL_STATE, action) => {
