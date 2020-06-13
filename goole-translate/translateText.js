@@ -1,12 +1,12 @@
 const { Translate } = require("@google-cloud/translate").v2;
 
-// const config = {
-//   projectId: process.env.GOOGLE_PROJECT_ID,
-//   keyFilename: "/home/davide/Downloads/glochat2-ee4b22d8ed00.json",
-// };
+const config = {
+  projectId: process.env.GOOGLE_PROJECT_ID,
+  keyFilename: process.env.GCP_KEY_FILE,
+};
 
 module.exports = (text, target) => {
-  const translate = new Translate();
+  const translate = new Translate(config);
 
   async function translateText() {
     try {
